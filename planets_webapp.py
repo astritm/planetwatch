@@ -7,16 +7,24 @@ import requests
 from datetime import datetime
 import time
 
-st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide")
 
-"""
-## Display $PLANET transactions
-If you try to get all transactions from Algoexplorer.io for a given wallet address, you will find a lot of transactions with 0 value.\n
-It's hard to identify the transactions with real amount of PLANETS.\n
-Therefore I have created this small web app to solve this issue.\n
-The webapp uses the Algoexplorer API with parameters like PLANETS asset-id: 27165954 and amount greater than 0.
 
-"""
+st.markdown(
+        """
+        # Display $PLANET transactions
+        """
+    )
+
+st.info("""
+        If you try to get all transactions from Algoexplorer.io for a given wallet address, you will find a lot of transactions with 0 value.
+        It's hard to identify the transactions with real amount of PLANETS.
+        Therefore I have created this small web app to solve this issue.
+        The webapp uses the Algoexplorer API with parameters like PLANETS asset-id: 27165954 and amount greater than 0.
+        """
+        )
+
+
 st.sidebar.write("")
 st.sidebar.title("About")
 st.sidebar.info(
@@ -27,8 +35,12 @@ st.sidebar.info(
                      
             You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
             
-            Special thanks to @feralfether, @inforkill, @Wagner and many more who have actively or passively
+            Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner and many more who have actively or passively
             contributed to the project.
+            
+            If you are not yet aware about PlanetWatch project, please check it here https://planetwatch.io/ 
+            Where you can buy different types of Airquality sensor and correspoding licenses.
+            Running a sensor and actively sending data streams to planetwatch you will be rewarded with PLANETS tokens.
             """
             )
 
@@ -42,7 +54,7 @@ if len(Wallet_Address) == 58:
 
     response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0'.format(Wallet_Address)).text
     response_info = json.loads(response)
-
+   
     for transactions in response_info['transactions']:
      amount = transactions['asset-transfer-transaction']['amount']
      amount = amount / 1000000
@@ -53,21 +65,29 @@ if len(Wallet_Address) == 58:
      if transactions['asset-transfer-transaction']['receiver'] == Wallet_Address:
         Total_rx = amount + Total_rx
         st.write ("Date:" , your_date, "PLANETS: + " , amount, " txid: " , transactions['id'] )
+        
      if transactions['asset-transfer-transaction']['receiver'] != Wallet_Address:
         Total_tx = amount + Total_tx
-        st.write ("Date:" , your_date , "PLANETS: - " , amount, " txid: " , transactions['id'] )
-    
+        st.write ("Date:" , your_date , "PLANETS: -", amount, " txid: " , transactions['id'] )
+        
     st.write()
-    st.write("====================================")
+  
     Total_rx = round(Total_rx, 2)
-    st.write ("Total Planets Received: {}".format(Total_rx))
-    st.write()
+    
+    
+    #st.write ("Total Planets Received: ", (Total_rx))
+    #st.write()
     Total_tx = round(Total_tx, 2)
-    st.write ("Total Planets Sent:     {}".format(Total_tx))
-    st.write()
+    #st.write ("Total Planets Sent: ", Total_tx)
+    #st.write()
     Diff = Total_rx - Total_tx
     Diff = round(Diff, 2)
-    st.write ("Diff: {}".format(Diff))
-    st.write()
-    st.write ("Total Transactions with PLANETS > 0: {}".format(Counter_tx))
-    st.write()
+    #st.write ("Diff: ", Diff)
+    #st.write()
+    #st.write ("Total Transactions with PLANETS > 0: ", Counter_tx)
+    #st.write()
+    
+    st.write(pd.DataFrame({
+    'Total Received': [Total_rx],
+    'Total Sent': [Total_tx]
+    }))
