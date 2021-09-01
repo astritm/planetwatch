@@ -7,12 +7,13 @@ import requests
 from datetime import datetime
 import time
 
-#st.set_page_config(layout="wide")
+st.set_page_config(page_title="Planets",layout='centered')
 
 
 st.markdown(
         """
-        # Display $PLANET transactions
+        ## Display $PLANETS Transactions
+        
         """
     )
 
@@ -21,10 +22,13 @@ st.info("""
         It's hard to identify the transactions with real amount of PLANETS.
         Therefore I have created this small web app to solve this issue.
         The webapp uses the Algoexplorer API with parameters like PLANETS asset-id: 27165954 and amount greater than 0.
+        
+        Output will include Date of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction id.
+        If you click in the transaction id it will bring you to the Algoexplorer.io to that specific transaction details.
         """
         )
 
-
+st.sidebar.title("PLANETS Transaction Formater")
 st.sidebar.write("")
 st.sidebar.title("About")
 st.sidebar.info(
@@ -54,7 +58,8 @@ if len(Wallet_Address) == 58:
 
     response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0'.format(Wallet_Address)).text
     response_info = json.loads(response)
-   
+    st.write("---------------------------------------------------")
+
     for transactions in response_info['transactions']:
      amount = transactions['asset-transfer-transaction']['amount']
      amount = amount / 1000000
@@ -64,30 +69,21 @@ if len(Wallet_Address) == 58:
      Counter_tx = Counter_tx + 1
      if transactions['asset-transfer-transaction']['receiver'] == Wallet_Address:
         Total_rx = amount + Total_rx
-        st.write ("Date:" , your_date, "PLANETS: + " , amount, " txid: " , transactions['id'] )
-        
+        st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
+                            
      if transactions['asset-transfer-transaction']['receiver'] != Wallet_Address:
         Total_tx = amount + Total_tx
-        st.write ("Date:" , your_date , "PLANETS: -", amount, " txid: " , transactions['id'] )
+        st.write (your_date, """<font color=red> - </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
         
-    st.write()
-  
+
     Total_rx = round(Total_rx, 2)
-    
-    
-    #st.write ("Total Planets Received: ", (Total_rx))
-    #st.write()
     Total_tx = round(Total_tx, 2)
-    #st.write ("Total Planets Sent: ", Total_tx)
-    #st.write()
     Diff = Total_rx - Total_tx
     Diff = round(Diff, 2)
-    #st.write ("Diff: ", Diff)
-    #st.write()
-    #st.write ("Total Transactions with PLANETS > 0: ", Counter_tx)
-    #st.write()
-    
+ 
+    st.write("---------------------------------------------------")
     st.write(pd.DataFrame({
-    'Total Received': [Total_rx],
-    'Total Sent': [Total_tx]
+    'Total $PLANETS Received': [Total_rx],
+    'Total $PLANETS Sent': [Total_tx],
+    'Total Transactions': [Counter_tx]
     }))
