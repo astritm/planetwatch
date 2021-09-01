@@ -23,7 +23,7 @@ st.info("""
         Therefore I have created this small web app to solve this issue.
         The webapp uses the Algoexplorer API with parameters like PLANETS asset-id: 27165954 and amount greater than 0.
         
-        Output will include Date of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction id.
+        Output will include Date/Time (UTC) of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction-id.
         If you click in the transaction id it will bring you to the Algoexplorer.io to that specific transaction details.
         """
         )
@@ -39,8 +39,8 @@ st.sidebar.info(
                      
             You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
             
-            Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner and many more who have actively or passively
-            contributed to the project.
+            Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, @Annie^^ and many more who have actively or passively
+            contributed to the PlanetWatch project.
             
             If you are not yet aware about PlanetWatch project, please check it here https://planetwatch.io/ 
             Where you can buy different types of Airquality sensor and correspoding licenses.
