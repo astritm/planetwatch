@@ -26,7 +26,7 @@ st.info("""
         Output will include Date of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction id.
         If you click in the transaction id it will bring you to the Algoexplorer.io to that specific transaction details.
         
-        NOTE: This web app does not store any data. You can check the source code yourself in the gituhub link in About section.
+        NOTE: This web app does not store any data. You can check the source code yourself in the gituhub link in the About section.
         """
         )
 
