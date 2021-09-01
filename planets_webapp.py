@@ -42,7 +42,7 @@ st.sidebar.info(
             You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
             
             Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, Annie^^ and many more who have actively or passively
-            contributed to the project.
+            contributed to the PlanetWatch project.
             
             If you are not yet aware about PlanetWatch project, please check it here https://planetwatch.io/ 
             Where you can buy different types of Airquality sensor and correspoding licenses.
