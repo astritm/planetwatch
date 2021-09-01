@@ -25,8 +25,6 @@ st.info("""
         
         Output will include Date of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction id.
         If you click in the transaction id it will bring you to the Algoexplorer.io to that specific transaction details.
-        
-        NOTE: This web app does not store any data. You can check the source code yourself in the GitHub link in the About section.
         """
         )
 
@@ -41,8 +39,8 @@ st.sidebar.info(
                      
             You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
             
-            Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, Annie^^ and many more who have actively or passively
-            contributed to the PlanetWatch project.
+            Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner and many more who have actively or passively
+            contributed to the project.
             
             If you are not yet aware about PlanetWatch project, please check it here https://planetwatch.io/ 
             Where you can buy different types of Airquality sensor and correspoding licenses.
@@ -58,7 +56,7 @@ Counter_tx=0
 Wallet_Address = st.text_input('Please enter a your wallet address without spaces and hit Enter')
 if len(Wallet_Address) == 58:
 
-    response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0'.format(Wallet_Address)).text
+    response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0&limit=10000'.format(Wallet_Address)).text
     response_info = json.loads(response)
     st.write("---------------------------------------------------")
 
@@ -71,11 +69,11 @@ if len(Wallet_Address) == 58:
      Counter_tx = Counter_tx + 1
      if transactions['asset-transfer-transaction']['receiver'] == Wallet_Address:
         Total_rx = amount + Total_rx
-        st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
+        st.write (your_date, """<font color=green> + </font>""", amount, """<font size="1.5"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
                             
      if transactions['asset-transfer-transaction']['receiver'] != Wallet_Address:
         Total_tx = amount + Total_tx
-        st.write (your_date, """<font color=red> - </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
+        st.write (your_date, """<font color=red> - </font>""", amount, """<font size="1.5"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
         
 
     Total_rx = round(Total_rx, 2)
