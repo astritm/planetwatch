@@ -25,6 +25,13 @@ st.info("""
         
         Output will include Date/Time (UTC) of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction-id.
         If you click in the transaction id it will bring you to the Algoexplorer.io to that specific transaction details.
+        
+        If you want to check the legitimacy of this webapp you can use my own Algorand wallet address below:
+        
+        3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ
+        
+        And if you want to contribute, that's the address to do it :)
+                
         """
         )
 
@@ -43,6 +50,10 @@ st.sidebar.info(
             
             Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, @Annie^^ and many more who have actively or passively
             contributed to the PlanetWatch project.
+            
+            Thanks to "Chris Crypto Coffee" for making such a lovely instructional and informative videos about PlanetWatch in general.
+            Please check his channel in the following link:
+            https://www.youtube.com/channel/UCDHHM5NoBmGGN3WnBCc_C5A
             
             If you are not yet aware about PlanetWatch project, please check it here https://planetwatch.io/ 
             Where you can buy different types of Airquality sensor and correspoding licenses.
