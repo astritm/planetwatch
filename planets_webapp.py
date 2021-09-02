@@ -69,11 +69,11 @@ if len(Wallet_Address) == 58:
      Counter_tx = Counter_tx + 1
      if transactions['asset-transfer-transaction']['receiver'] == Wallet_Address:
         Total_rx = amount + Total_rx
-        st.write (your_date, """<font color=green> + </font>""", amount, """<font size="1.8"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
+        st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
                             
      if transactions['asset-transfer-transaction']['receiver'] != Wallet_Address:
         Total_tx = amount + Total_tx
-        st.write (your_date, """<font color=red> - </font>""", amount, """<font size="1.8"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
+        st.write (your_date, """<font color=red> - </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
         
 
     Total_rx = round(Total_rx, 2)
