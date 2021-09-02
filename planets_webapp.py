@@ -34,8 +34,10 @@ st.sidebar.title("About")
 st.sidebar.info(
             """
             The webapp is created by Astr0 to help the PW community and it is ad-free
-            and open-source. If you find the app useful you can support me here: 
-            Algorand: `3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ`  
+            and open-source. 
+            
+            If you find the app useful you can support me here: 
+            Algorand wallet address : `3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ`  
                      
             You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
             
