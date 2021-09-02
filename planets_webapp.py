@@ -15,10 +15,12 @@ st.set_page_config(page_title="Planets",layout='centered')
 
 st.markdown(
         """
-        ## Display $PLANETS Transactions
+        # $PLANETS Transactions Viewer!
         
         """
     )
+
+Wallet_Address = st.text_input('Please enter a your Algorand wallet address without spaces and hit Enter')
 
 st.info("""
         If you try to get all transactions from Algoexplorer.io for a given wallet address, you will find a lot of transactions with 0 value.
@@ -26,9 +28,12 @@ st.info("""
         Therefore I have created this small web app to solve this issue.
         The webapp uses the Algoexplorer API with parameters like PLANETS asset-id: 27165954 and amount greater than 0.
         
-        Output will include Date/Time (UTC) of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction-id.
+        The output will include Date/Time (UTC) of the transaction, the amount of PLANETS received (+) or sent (-) and the transaction-id.
         If you click in the transaction id it will bring you to the Algoexplorer.io to that specific transaction details.
-        
+        """     
+       )
+
+st.info ("""
         If you want to check the legitimacy of this webapp you can use my own Algorand wallet address below:
         
         **3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ**
@@ -70,7 +75,7 @@ Total_rx = 0
 Total_tx = 0
 Diff = 0
 Counter_tx=0
-Wallet_Address = st.text_input('Please enter a your wallet address without spaces and hit Enter')
+
 if len(Wallet_Address) == 58:
 
     response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0&limit=10000'.format(Wallet_Address)).text
