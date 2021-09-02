@@ -53,7 +53,7 @@ st.sidebar.info(
             
             Thanks to "Chris Crypto Coffee" for making such a lovely instructional and informative videos about PlanetWatch in general.
             Please check his channel in the following link:
-            https://www.youtube.com/channel/UCDHHM5NoBmGGN3WnBCc_C5A
+            https://bit.ly/2WNAwxk
             
             If you are not yet aware about PlanetWatch project, please check it here https://planetwatch.io/ 
             Where you can buy different types of Airquality sensor and correspoding licenses.
