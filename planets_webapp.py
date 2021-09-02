@@ -28,7 +28,7 @@ st.info("""
         
         If you want to check the legitimacy of this webapp you can use my own Algorand wallet address below:
         
-        3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ
+        **3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ**
         
         And if you want to contribute, that's the address to do it :)
                 
@@ -38,20 +38,21 @@ st.info("""
 st.sidebar.title("PLANETS Transaction Formater")
 st.sidebar.write("")
 st.sidebar.title("About")
+
 st.sidebar.info(
             """
             The webapp is created by Astr0 to help the PW community and it is ad-free
             and open-source. 
             
-            If you find the app useful you can support me here: 
-            Algorand wallet address : `3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ`  
+            If you find the app useful you can support me in the 
+            Algorand wallet address in the description.
                      
             You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
             
             Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, @Annie^^ and many more who have actively or passively
             contributed to the PlanetWatch project.
             
-            Thanks to "Chris Crypto Coffee" for making such a lovely instructional and informative videos about PlanetWatch in general.
+            Thanks to **Chris Crypto Coffee** for making such a lovely instructional and informative videos about PlanetWatch in general.
             Please check his channel in the following link:
             https://bit.ly/2WNAwxk
             
