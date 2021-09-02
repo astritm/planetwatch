@@ -43,7 +43,7 @@ st.info ("""
         """
         )
 
-st.sidebar.title("PLANETS Transaction Formater")
+#st.sidebar.title("PLANETS Transaction Formater")
 st.sidebar.write("")
 st.sidebar.title("About")
 
