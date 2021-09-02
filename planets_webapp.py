@@ -7,8 +7,11 @@ import requests
 from datetime import datetime
 import time
 
+
 st.set_page_config(page_title="Planets",layout='centered')
 
+
+   
 
 st.markdown(
         """
@@ -101,3 +104,16 @@ if len(Wallet_Address) == 58:
     'Total $PLANETS Sent': [Total_tx],
     'Total Transactions': [Counter_tx]
     }))
+    
+   
+@st.cache(allow_output_mutation=True)
+def Pageviews():
+    return []
+
+pageviews=Pageviews()
+pageviews.append('dummy')
+
+try:
+    st.sidebar.markdown('Page viewed = {} times.'.format(len(pageviews)))
+except ValueError:
+    st.sidebar.markdown('Page viewed = {} times.'.format(1))
