@@ -55,7 +55,7 @@ st.sidebar.info(
             If you find the app useful you can support me in the 
             Algorand wallet address in the description.
                      
-            You can find the source and contribute [here](https://github.com/astritm/planetwatch).  
+            You can find the source code and contribute [here](https://github.com/astritm/planetwatch).  
             
             Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, @Annie^^ and many more who have actively or passively
             contributed to the PlanetWatch project.
