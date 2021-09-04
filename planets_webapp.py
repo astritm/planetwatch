@@ -78,11 +78,18 @@ Counter_tx=0
 
 if len(Wallet_Address) == 58:
 
-    response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0&limit=10000'.format(Wallet_Address)).text
-    response_info = json.loads(response)
+    #API request to Algoexplorer.io
+    response_algoexplorer = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0&limit=10000'.format(Wallet_Address)).text
+    response_info_algo = json.loads(response_algoexplorer)
+    
+    #API request to BitFinex PLANETS:USD
+    response_bitfinex = requests.get('https://api-pub.bitfinex.com/v2/ticker/tPLANETS:USD').text
+    response_info_bitfinex = json.loads(response_bitfinex)
+    last_price=response_info_bitfinex[6]
+    
     st.write("---------------------------------------------------")
 
-    for transactions in response_info['transactions']:
+    for transactions in response_info_algo['transactions']:
      amount = transactions['asset-transfer-transaction']['amount']
      amount = amount / 1000000
      amount = round (amount, 2)
@@ -102,12 +109,17 @@ if len(Wallet_Address) == 58:
     Total_tx = round(Total_tx, 2)
     Diff = Total_rx - Total_tx
     Diff = round(Diff, 2)
- 
+    Total_USD_wallet=last_price * Diff
     st.write("---------------------------------------------------")
+    st.write('Summary')
     st.write(pd.DataFrame({
-    'Total $PLANETS Received': [Total_rx],
-    'Total $PLANETS Sent': [Total_tx],
-    'Total Transactions': [Counter_tx]
+    'Received': [Total_rx],
+    'Sent': [Total_tx],
+    'In wallet:': [Diff],
+    'PLANETS:USD': [last_price],
+    'Total USD:' : [Total_USD_wallet]
+    
+   
     }))
     
    
