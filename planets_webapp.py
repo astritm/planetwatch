@@ -42,7 +42,8 @@ st.info ("""
                 
         """
         )
-
+st.write("---------------------------------------------------")
+col1,col2 = st.columns([8,1])
 #st.sidebar.title("PLANETS Transaction Formater")
 st.sidebar.write("")
 st.sidebar.title("About")
@@ -111,16 +112,19 @@ if len(Wallet_Address) == 58:
     Diff = round(Diff, 2)
     Total_USD_wallet=last_price * Diff
     st.write("---------------------------------------------------")
-    st.write('Summary')
-    st.write(pd.DataFrame({
-    'Received': [Total_rx],
-    'Sent': [Total_tx],
-    'In wallet:': [Diff],
-    'PLANETS:USD': [last_price],
-    'Total USD:' : [Total_USD_wallet]
+    with col1:
+     st.write(pd.DataFrame({
+     '$PLANETS Received': [Total_rx],
+     '$PLANETS Sent': [Total_tx],
+    })) 
+    with col1:
+     st.write(pd.DataFrame({
+     'In wallet:': [Diff],
+     'PLANETS:USD': [last_price],
+     'Total USD:' : [Total_USD_wallet]
     
    
-    }))
+     }))
     
    
 @st.cache(allow_output_mutation=True)
