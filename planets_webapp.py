@@ -126,13 +126,21 @@ if len(Wallet_Address) == 58:
     st.write("---------------------------------------------------")
     with col1:
      st.write(pd.DataFrame({
-     '$PLANETS Rewards' : [Planets_sensor],
-     '$PLANETS Received': [Total_rx],
-     '$PLANETS Sent': [Total_tx]
+      'Rewarded' : [Planets_sensor],
+      'USD' : [Planets_sensor * last_price],
+      'EUR' : [(Planets_sensor * last_price)/ eur_usd]
+         
+     }))
+    
+    with col1:
+     st.write(pd.DataFrame({
+     'Received': [Total_rx],
+     'Sent': [Total_tx],
+     'Wallet' : [Diff]
+     
     })) 
     with col1:
      st.write(pd.DataFrame({
-     'In wallet:': [Diff],
      'PLANETS:USD': [last_price],
      'Total USD' : [Total_USD_wallet],
      'Total EUR' : [Total_EUR_wallet]
