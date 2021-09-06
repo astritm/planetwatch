@@ -75,7 +75,8 @@ st.sidebar.info(
 Total_rx = 0
 Total_tx = 0
 Diff = 0
-Counter_tx=0
+Counter_tx = 0
+Planets_sensor = 0
 
 if len(Wallet_Address) == 58:
 
@@ -102,9 +103,14 @@ if len(Wallet_Address) == 58:
      timestamp = transactions['round-time']
      your_date = datetime.fromtimestamp(timestamp)
      Counter_tx = Counter_tx + 1
+     
+     #received from ZW3ISEHZUHPO7OZGMKLKIIMKVICOUDRCERI454I3DB2BH52HGLSO67W754
+       
      if transactions['asset-transfer-transaction']['receiver'] == Wallet_Address:
-        Total_rx = amount + Total_rx
-        st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
+       if transactions['sender'] == 'ZW3ISEHZUHPO7OZGMKLKIIMKVICOUDRCERI454I3DB2BH52HGLSO67W754':
+        Planets_sensor = amount + Planets_sensor
+       Total_rx = amount + Total_rx
+       st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
                             
      if transactions['asset-transfer-transaction']['receiver'] != Wallet_Address:
         Total_tx = amount + Total_tx
@@ -120,8 +126,9 @@ if len(Wallet_Address) == 58:
     st.write("---------------------------------------------------")
     with col1:
      st.write(pd.DataFrame({
+     '$PLANETS Rewards' : [Planets_sensor],
      '$PLANETS Received': [Total_rx],
-     '$PLANETS Sent': [Total_tx],
+     '$PLANETS Sent': [Total_tx]
     })) 
     with col1:
      st.write(pd.DataFrame({
@@ -130,7 +137,6 @@ if len(Wallet_Address) == 58:
      'Total USD' : [Total_USD_wallet],
      'Total EUR' : [Total_EUR_wallet]
     
-   
      }))
     
    
