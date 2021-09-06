@@ -88,6 +88,11 @@ if len(Wallet_Address) == 58:
     response_info_bitfinex = json.loads(response_bitfinex)
     last_price=response_info_bitfinex[6]
     
+    #API to get EUR-USD rate
+    response_eurusd = requests.get('https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/usd.json').text
+    response_info_eurusd = json.loads(response_eurusd)
+    eur_usd = response_info_eurusd['usd']
+        
     st.write("---------------------------------------------------")
 
     for transactions in response_info_algo['transactions']:
@@ -111,6 +116,7 @@ if len(Wallet_Address) == 58:
     Diff = Total_rx - Total_tx
     Diff = round(Diff, 2)
     Total_USD_wallet=last_price * Diff
+    Total_EUR_wallet = Total_USD_wallet / eur_usd
     st.write("---------------------------------------------------")
     with col1:
      st.write(pd.DataFrame({
@@ -121,7 +127,8 @@ if len(Wallet_Address) == 58:
      st.write(pd.DataFrame({
      'In wallet:': [Diff],
      'PLANETS:USD': [last_price],
-     'Total USD:' : [Total_USD_wallet]
+     'Total USD' : [Total_USD_wallet],
+     'Total EUR' : [Total_EUR_wallet]
     
    
      }))
