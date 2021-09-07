@@ -95,6 +95,10 @@ Total_tx = 0
 Diff = 0
 Counter_tx = 0
 Planets_sensor = 0
+Total_wallets_rx = 0
+Total_wallets_tx = 0
+Total_wallets_Diff = 0
+Total_rewards = 0
 
 
     
@@ -114,6 +118,11 @@ st.write('***Transactions***')
 st.write("---------------------------------------------------")
 
 for Wallet_address in Wallet_addresses:
+ Total_rx = 0
+ Total_tx = 0
+ Diff = 0
+ Counter_tx = 0
+ Planets_sensor = 0
  if len(Wallet_address) == 58:
     st.write('*Address: %s * ' %(Wallet_address))
     #API request to Algoexplorer.io
@@ -148,12 +157,8 @@ for Wallet_address in Wallet_addresses:
     Total_EUR_wallet = Total_USD_wallet / eur_usd
     
     #Total wallets counters
-    Total_wallets_rx = 0
-    Total_wallets_tx = 0
-    Total_wallets_Diff = 0
-    Total_rewards = 0
-    Total_Wallets_rx = Total_rx + Total_wallets_rx
-    Total_Wallets_tx = Total_tx + Total_wallets_tx
+    Total_wallets_rx = Total_rx + Total_wallets_rx
+    Total_wallets_tx = Total_tx + Total_wallets_tx
     Total_wallets_Diff = Diff + Total_wallets_Diff
     Total_rewards = Planets_sensor + Total_rewards
     
@@ -201,8 +206,8 @@ with col1:
     
 with col1:
      st.write(pd.DataFrame({
-     'Received': [Total_Wallets_rx],
-     'Sent': [Total_Wallets_tx],
+     'Received': [Total_wallets_rx],
+     'Sent': [Total_wallets_tx],
      'Wallet' : [Total_wallets_Diff]
      
     })) 
