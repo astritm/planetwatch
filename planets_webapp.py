@@ -31,7 +31,7 @@ count = int(count_wallets)
 
 Wallet_addresses = []
 for wallets in range(count):
-  Wallets = form.text_input('Please enter a your Algorand wallet address {} without spaces and hit Enter'.format(wallets +1))
+  Wallets = form.text_input('Please enter a your Algorand wallet address {} without spaces!'.format(wallets +1))
   Wallet_addresses.append(Wallets)
 
 submit = form.form_submit_button('RUN')
