@@ -24,7 +24,7 @@ st.markdown(
 #count_wallets="1"
 
 form = st.form(key='my-form')
-count_wallets = form.number_input('How many wallets you want to enter:', value=1, max_value=5)
+count_wallets = form.number_input('How many wallet addresess you want to view:', value=1, max_value=5)
 submit = form.form_submit_button('Submit')
 count = int(count_wallets)
     
