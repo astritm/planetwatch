@@ -24,7 +24,7 @@ def write(state):
           
       )
   
-st.info('Enable API first as expalined in the awair official web [here] (https://support.getawair.com/hc/en-us/articles/360049221014-Awair-Element-Local-API-Feature#h_01F40FBBW5323GBPV7D6XMG4J8). DMZ is also be required to be able to access the Awair IP from the outside world!')
+ st.info('Enable API first as expalined in the awair official web [here] (https://support.getawair.com/hc/en-us/articles/360049221014-Awair-Element-Local-API-Feature#h_01F40FBBW5323GBPV7D6XMG4J8). DMZ is also be required to be able to access the Awair IP from the outside world!')
  
  form = st.form(key='form')
  ip = form.text_input('Plesase enter the local IP address of Awair Elements:')
