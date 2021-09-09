@@ -9,7 +9,7 @@ import aware
 
 
 
-PAGE_NAMES = ["Transaction Viewer", "Aware Dashboard", "Planets Calculator"]
+PAGE_NAMES = ["Transaction Viewer", "Awair Dashboard", "Planets Calculator"]
 PAGE_SRCS = [transactions, aware, calculator]
 
 st.set_page_config(page_title="PW tools")
