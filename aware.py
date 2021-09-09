@@ -16,7 +16,7 @@ def write(state):
  
  st.markdown(
           """
-          <h1 style="color: darkblue; text-align:center;">Aware Elements Dashboard</h1>
+          <h1 style="color: darkblue; text-align:center;">Awair Elements Dashboard</h1>
          
          
          """, unsafe_allow_html=True
