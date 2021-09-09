@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit.elements import layouts
-import streamlit_analytics
+#import streamlit_analytics
 
 # Load pages
 import transactions
@@ -26,7 +26,7 @@ def main():
     if len(state) == 0:
         state.extend([0., 0., 0.])
     
-    with streamlit_analytics.track():
+    #with streamlit_analytics.track():
 
 
         st.sidebar.image('https://mlawiy0je0ms.i.optimole.com/206F41w.AtuS~2d373/w:100/h:auto/q:auto/https://www.planetwatch.io/wp-content/themes/Planetwatchre/images/PlanetWatch_logo_new-2.png', width=200)
