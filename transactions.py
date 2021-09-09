@@ -23,6 +23,16 @@ def write(state):
          
          """, unsafe_allow_html=True
      )
+
+ st.info ("""
+         If you want to check the legitimacy of this webapp you can use my own Algorand wallet address below:
+         
+         **3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ**
+         
+         And if you want to contribute, that's the address to do it :)
+                 
+         """
+         )
  
 
  form = st.form(key='my-form')
@@ -41,8 +51,8 @@ def write(state):
  
      
  #Wallet_Address = st.text_input('Please enter a your Algorand wallet address without spaces and hit Enter')
- 
- st.info("""
+ with st.expander("App Info!"):
+  st.info("""
          If you try to get all transactions from Algoexplorer.io for a given wallet address, you will find a lot of transactions with 0 value.
          It's hard to identify the transactions with real amount of PLANETS.
          Therefore I have created this small web app to solve this issue.
@@ -53,15 +63,7 @@ def write(state):
          """     
         )
  
- st.info ("""
-         If you want to check the legitimacy of this webapp you can use my own Algorand wallet address below:
-         
-         **3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ**
-         
-         And if you want to contribute, that's the address to do it :)
-                 
-         """
-         )
+ 
  if run:
          
   st.write("---------------------------------------------------")
