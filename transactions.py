@@ -11,9 +11,6 @@ from operator import add
 import os
 
 
-
-st.set_page_config(page_title="Planets",layout='centered')   
-
 def write(state):
  
 
