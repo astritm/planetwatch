@@ -30,7 +30,7 @@ def main():
         
    with streamlit_analytics.track():
     
-    st.sidebar.image("/Users/prive/personal_projects/streamlit/planets/PlanetWatch_logo_new-2.png", width=200)
+    st.sidebar.image("https://www.planetwatch.io/wp-content/themes/Planetwatchre/images/PlanetWatch_logo_new-2.png", width=200)
     page_selection = st.sidebar.radio("Menu", PAGE_NAMES)
     page_selection_ix = PAGE_NAMES.index(page_selection)
     page = PAGE_SRCS[page_selection_ix]
