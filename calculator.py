@@ -5,8 +5,8 @@ import json
 import pandas as pd
 
 
-#def write(state):
-if True:
+def write(state):
+
  st.markdown(
           """
           <h1 style="color: darkblue; text-align:center;">PLANETS calculator</h1>
@@ -47,3 +47,4 @@ if True:
    currency: [planet_price(currency) * planets],
 
   }))
+
