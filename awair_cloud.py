@@ -25,7 +25,7 @@ def write(state):
           
       )
   
- st.info('Enable Clound API first and get Access Token as expalined below!')
+ st.info('Enable Cloud API first and get Access Token as expalined below!')
  with st.expander ("How to enable Cloud API"):
    st.markdown("""
               ### How do I enable Cloud API
