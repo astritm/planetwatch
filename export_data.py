@@ -4,7 +4,7 @@ import pandas as pd
 import json
 from typing import Counter
 import requests
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import time
 from operator import add
 from collections import defaultdict
@@ -13,10 +13,10 @@ from math import ceil
 
 def write(state): 
 
-
+ 
  st.markdown(
          """
-         <h1 style="color: darkblue; text-align:center;">Export Planets Rewarded Data</h1>
+         <h1 style="color: darkblue; text-align:center;">Export Mining Data</h1>
          
          
          """, unsafe_allow_html=True
@@ -33,10 +33,13 @@ def write(state):
   dicts={}
   
  
+  price_date = {}
+    
   if len(Wallet_address) == 58:
     #API request to Algoexplorer.io
     response_algoexplorer = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0&limit=10000'.format(Wallet_address)).text
     response_info_algo = json.loads(response_algoexplorer)
+
     
     all_transactions = 0
     for transactions in response_info_algo['transactions']:
@@ -47,10 +50,10 @@ def write(state):
       st.error("Error getting Planets price from coingeco, try again later...")
       st.stop()
     
-    with st.spinner(text='In Progress...'):
-     # Get PLANETS price from coingeco at specific date.
 
-                
+    
+    with st.spinner(text='In Progress...'):
+                    
      response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
      if response_planets_price_usd.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
@@ -65,50 +68,51 @@ def write(state):
      response_planets_price_eur = response_planets_price_eur.text 
      time.sleep(1)
      
-     esponse_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))       
-     if esponse_planets_price_gbp.status_code != 200:
+     response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))       
+     if response_planets_price_gbp.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
       st.stop()
-     response_planets_price_gbp = esponse_planets_price_gbp.text
+     response_planets_price_gbp = response_planets_price_gbp.text
      
-     response_info_planets_price_usd = json.loads(response_planets_price_usd)
-     response_info_planets_price_eur = json.loads(response_planets_price_eur)
-     response_info_planets_price_gbp = json.loads(response_planets_price_gbp)
- 
-         
+     #getting PLANETS:FIAT:DATE from Coingeco
+     def planet_price_date(date, currency):
+      if currency == 'usd':
+       response_info_planets_price = json.loads(response_planets_price_usd)
+      elif currency == "eur":
+       response_info_planets_price = json.loads(response_planets_price_eur)
+      elif currency == 'gbp':
+       response_info_planets_price = json.loads(response_planets_price_gbp)
+       
+      i = len(response_info_planets_price['prices']) - 1
+      for price in response_info_planets_price['prices']:
+       date_list = datetime.today()
+       date_delta = date_list - timedelta(days=i)
+       date_delta = date_delta.strftime("%d-%m-%Y")
+       price_d = price[1]
+       price_d = float(round(price_d, 4))
+       price_date[date_delta] = price_d
+       i-= 1
+      return (price_date[date])
+     
      index = 0
-     price_usd = 0
-     price_eur = 0
-     price_gbp = 0
-     timestamp = 1000000000
-                      
-     i = len(response_info_planets_price_usd['prices'])
+                     
+     
      for transactions in response_info_algo['transactions']:
       amount = transactions['asset-transfer-transaction']['amount']
       amount = amount / 1000000
       amount = round (amount, 2)
-                 
-      #preserve previous txid date 
-      date_txid_1 = datetime.fromtimestamp(timestamp)
-      date_txid_1 = date_txid_1.strftime("%d-%m-%Y")
-      
+
+        
       timestamp = transactions['round-time']
       date_txid = datetime.fromtimestamp(timestamp)
-      Counter_tx = Counter_tx + 1
       date_txid = date_txid.strftime("%d-%m-%Y")
+
+      Counter_tx = Counter_tx + 1
       
+      price_usd = planet_price_date(date_txid, 'usd')
+      price_eur = planet_price_date(date_txid, 'eur')
+      price_gbp = planet_price_date(date_txid, 'gbp')
      
-      #checking if txid date still the same 
-      if date_txid != date_txid_1:
-       i = i - 1
-      
-      price_usd = float(response_info_planets_price_usd['prices'][i][1])
-      price_eur = float(response_info_planets_price_eur['prices'][i][1])
-      price_gbp = float(response_info_planets_price_gbp['prices'][i][1])
-                
-      price_usd = round(price_usd, 3)
-      price_eur = round(price_eur, 3)
-      price_gbp = round(price_gbp, 3)
       
       if transactions['asset-transfer-transaction']['receiver'] == Wallet_address:
          Total_usd = round(price_usd * amount, 3)
@@ -138,8 +142,6 @@ def write(state):
       index = index + 1
       
 
-  
-    
     df = pd.DataFrame.from_dict(dicts, orient='index')
     st.dataframe(df)
     today = date.today()
