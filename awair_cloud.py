@@ -36,7 +36,8 @@ def write(state):
               3. Tap "Cloud API" in the Awair APIs menu
               4. Tap "Get API Token" to enable the feature for your Awair device
               5. Sign in with your account (if you don't have one you can create it [here] (https://developer.getawair.com/onboard/login))
-              6. Copy Access Token from there and paste it in the app!
+              6. Get the Access Token from [here] (https://developer.getawair.com/console/access-token)
+              7. Copy Access Token from there and paste it in the app!
   """)
  
  form = st.form(key='form')
