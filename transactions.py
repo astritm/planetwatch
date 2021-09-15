@@ -82,15 +82,17 @@ def write(state):
   
   
       
-  #API request to BitFinex PLANETS:USD
-  response_bitfinex = requests.get('https://api-pub.bitfinex.com/v2/ticker/tPLANETS:USD').text
-  response_info_bitfinex = json.loads(response_bitfinex)
-  last_price=response_info_bitfinex[6]
+
    
-  #API to get EUR-USD rate
-  response_eurusd = requests.get('https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/usd.json').text
-  response_info_eurusd = json.loads(response_eurusd)
-  eur_usd = response_info_eurusd['usd']
+ 
+  #Get PLANET prices from Coingecko
+  def planet_price(vs_currency):
+   request_price = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=planetwatch&vs_currencies={}'.format(vs_currency))
+   if request_price.status_code != 200: 
+    st.error("Error getting API data. Try again later...")
+    st.stop()
+   price = json.loads(request_price.text)
+   return price['planetwatch'][vs_currency]
       
          
   st.write("---------------------------------------------------")
@@ -123,8 +125,7 @@ def write(state):
          if transactions['sender'] == 'ZW3ISEHZUHPO7OZGMKLKIIMKVICOUDRCERI454I3DB2BH52HGLSO67W754':
           Planets_sensor = amount + Planets_sensor
          Total_rx = amount + Total_rx
-         st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
-                              
+         st.write (your_date, """<font color=green> + </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)                
        if transactions['asset-transfer-transaction']['receiver'] != Wallet_address:
           Total_tx = amount + Total_tx
           st.write (your_date, """<font color=red> - </font>""", amount, """<font size="2"><a href="https://algoexplorer.io/tx/%s">%s</a></font>""" %(transactions['id'], transactions['id']), unsafe_allow_html=True)
@@ -134,8 +135,8 @@ def write(state):
       Total_tx = round(Total_tx, 2)
       Diff = Total_rx - Total_tx
       Diff = round(Diff, 2)
-      Total_USD_wallet=last_price * Diff
-      Total_EUR_wallet = Total_USD_wallet / eur_usd
+      Total_USD_wallet = planet_price('usd') * Diff
+      Total_EUR_wallet = planet_price('eur') * Diff
       
       #Total wallets counters
       Total_wallets_rx = Total_rx + Total_wallets_rx
@@ -150,8 +151,8 @@ def write(state):
         st.write('**%s**' %(Wallet_address))
        st.write(pd.DataFrame({
         'Rewarded' : [Planets_sensor],
-        'USD' : [Planets_sensor * last_price],
-        'EUR' : [(Planets_sensor * last_price)/ eur_usd]
+        'USD' : [Planets_sensor * planet_price('usd')],
+        'EUR' : [(Planets_sensor * planet_price('eur'))]
            
        }))
       
@@ -164,7 +165,7 @@ def write(state):
       })) 
       with col1:
        st.write(pd.DataFrame({
-       'PLANETS:USD': [last_price],
+       'PLANETS:USD': [planet_price('usd')],
        'Total USD' : [Total_USD_wallet],
        'Total EUR' : [Total_EUR_wallet]
       
@@ -181,8 +182,8 @@ def write(state):
        st.write("---------------------------------------------------")
        st.write(pd.DataFrame({
          'Rewarded' : [Total_rewards],
-         'USD' : [Total_rewards * last_price],
-         'EUR' : [(Total_rewards * last_price)/ eur_usd]
+         'USD' : [Total_rewards * planet_price('usd')],
+         'EUR' : [(Total_rewards * planet_price('eur'))]
             
         }))
        
@@ -195,22 +196,10 @@ def write(state):
        })) 
    with col1:
         st.write(pd.DataFrame({
-        'PLANETS:USD': [last_price],
-        'Total USD' : [Total_wallets_Diff * last_price],
-        'Total EUR' : [(Total_wallets_Diff * last_price)/eur_usd]
+        'PLANETS:USD': [planet_price('usd')],
+        'Total USD' : [Total_wallets_Diff * planet_price('usd')],
+        'Total EUR' : [(Total_wallets_Diff * planet_price('eur'))]
        
         }))
  
- 
- #@st.cache(allow_output_mutation=True)
- #def Pageviews():
- #    return []
- 
-# pageviews=Pageviews()
-# pageviews.append('dummy')
- 
-# try:
-#     st.sidebar.markdown('Page viewed = {} times.'.format(len(pageviews)))
-# except ValueError:
-#     st.sidebar.markdown('Page viewed = {} times.'.format(1))
  
