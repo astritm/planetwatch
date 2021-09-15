@@ -97,7 +97,7 @@ def write(state):
     return ([score, temp, humid, co2, voc, pm25])
 
  
- for key, value in dict_id_name.items():
+  for key, value in dict_id_name.items():
   
     score = awair_aq(key)[0]
     temp = awair_aq(key)[1]
@@ -130,10 +130,10 @@ def write(state):
     st.write('---------------------')
       
   
- st.markdown("### Air Quality Factors Measured By Awair Element")
- st.write("------------")
+  st.markdown("### Air Quality Factors Measured By Awair Element")
+  st.write("------------")
   
- with st.expander("Awair Score"):
+  with st.expander("Awair Score"):
          st.markdown(
              """
              ## How do I read my Awair Score? What can the Trend Graph view tell me about my air quality?
@@ -145,7 +145,7 @@ def write(state):
              """)
  
  
- with st.expander("Temperature"):
+  with st.expander("Temperature"):
          st.markdown(
              """
              ## Temperature 
@@ -157,7 +157,7 @@ def write(state):
                         
              """)
          
- with st.expander("Hmidity"):
+  with st.expander("Hmidity"):
          st.markdown(
              """
              ## Relative Humidity
@@ -166,7 +166,7 @@ def write(state):
              Alternatively, dry air can lead to respiratory issues and the increased likelihood of viral transmission.
                         
              """)
- with st.expander("Carbon Dioxide (CO₂)"):
+  with st.expander("Carbon Dioxide (CO₂)"):
          st.markdown(
              """
              ## Carbon Dioxide (CO₂)
@@ -177,7 +177,7 @@ def write(state):
                         
              """)
          
- with st.expander("Chemicals (TVOCs)"):
+  with st.expander("Chemicals (TVOCs)"):
          st.markdown(
              """
              ## Chemicals (TVOCs)
@@ -188,7 +188,7 @@ def write(state):
                         
              """)
          
- with st.expander("Fine Dust (PM2.5)"):
+  with st.expander("Fine Dust (PM2.5)"):
          st.markdown(
              """
              ## Fine Dust (PM2.5)
