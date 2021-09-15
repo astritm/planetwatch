@@ -6,13 +6,13 @@ import streamlit_analytics
 # Load pages
 import transactions
 import calculator
-import awair
+import awair_cloud
 import export_data
 
 
 
 PAGE_NAMES = ["Transaction Viewer", "Export Data", "Awair Dashboard", "Planets Calculator"]
-PAGE_SRCS = [transactions, export_data, awair, calculator]
+PAGE_SRCS = [transactions, export_data, awair_cloud, calculator]
 
 st.set_page_config(page_title="PW tools")
 
