@@ -2,19 +2,21 @@ import streamlit as st
 from streamlit.elements import layouts
 import streamlit_analytics
 
+st.set_page_config(page_title="PW tools")
 
 # Load pages
 import transactions
 import calculator
 import awair_cloud
 import export_data
+import FAQ
 
 
 
-PAGE_NAMES = ["Transaction Viewer", "Export Data", "Awair Dashboard", "Planets Calculator"]
-PAGE_SRCS = [transactions, export_data, awair_cloud, calculator]
+PAGE_NAMES = ["Transaction Viewer", "Export Mining Data", "Awair Dashboard", "Planets Calculator", "FAQ"]
+PAGE_SRCS = [transactions, export_data, awair_cloud, calculator, FAQ]
 
-st.set_page_config(page_title="PW tools")
+
 
 @st.cache(allow_output_mutation=True)
 def storage():
