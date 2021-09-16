@@ -43,8 +43,10 @@ def write(state):
 
  if submit:
    
-   st.write(pd.DataFrame({    
-   currency: [planet_price(currency) * planets],
+   st.write(pd.DataFrame({
+   "amount": [planets],    
+   "planets:{}".format(currency): [planet_price(currency)],         
+   currency: [planet_price(currency) * planets]
 
   }))
 
