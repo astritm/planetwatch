@@ -26,7 +26,7 @@ def write(state):
              
               <html style="color: #3ED625; text-align:left;">Q1. How much does Type 1 sensor costs?</html>
               A2. Type 1 (Airqino) costs €1,350.00 (VAT excluded). Payment should be done in PLANETS.
-                  As the time of writing this answer, there are two qualified products as Planetwatch T4 sensors Awair Elements and Atmotube Pro!
+                 
              
              ---
              
