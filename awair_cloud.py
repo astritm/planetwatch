@@ -43,7 +43,7 @@ def write(state):
  form = st.form(key='form')
  access_token = form.text_input('Please enter the Access Token of your Awair developer account:')
  submit = form.form_submit_button('Submit')
- access_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMTAzODA2In0.qy9hQYi-JmiIl2KYr_Sk4lj00vLJh58anl--15_qMvA"
+ 
  
  if submit:
   devices_api = "https://developer-apis.awair.is/v1/users/self/devices"
