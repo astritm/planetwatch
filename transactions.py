@@ -111,7 +111,7 @@ def write(state):
       if int(count_wallets) > 1:
        st.write('*Address: %s * ' %(Wallet_address))
       #API request to Algoexplorer.io
-      response_algoexplorer = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0&limit=10000'.format(Wallet_address)).text
+      response_algoexplorer = requests.get('https://algoindexer.algoexplorerapi.io/v2/transactions?limit=100&asset-id=27165954&currency-greater-than=0&address={}'.format(Wallet_address)).text
       response_info_algo = json.loads(response_algoexplorer)
      
       for transactions in response_info_algo['transactions']:
