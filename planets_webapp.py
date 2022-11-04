@@ -58,10 +58,7 @@ def main():
         """
                 
         You can find the source code and contribute [here](https://github.com/astritm/planetwatch).  
-     
-        Special thanks to the PW discord mods @feralfether, @inforkill, @Wagner, @Annie^^ and many more who have actively or passively
-        contributed to the PlanetWatch project.
-        
+                   
         Thanks to **Chris Crypto Coffee** for making such a lovely instructional and informative videos about PlanetWatch in general.
         Please check his channel in the following link:
         https://bit.ly/2WNAwxk
