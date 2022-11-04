@@ -18,7 +18,7 @@ def write(state):
  def planet_price(vs_currency):
    request_price = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=planetwatch&vs_currencies={}'.format(vs_currency))
    if request_price.status_code != 200: 
-    st.error("Error getting API data. Try again later...")
+    st.error("Error getting PLANETs Price data from CoinGeco. Try again later...")
     st.stop()
    price = json.loads(request_price.text)
    return price['planetwatch'][vs_currency]
