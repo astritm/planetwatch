@@ -13,7 +13,7 @@ if len(Wallet_Address) != 58:
  print ("Not a valid Algorand Wallet Address!!!")
  print()
  exit()
-response = requests.get('https://algoexplorerapi.io/idx2/v2/transactions?address={}&asset-id=27165954&currency-greater-than=0'.format(Wallet_Address)).text
+response = requests.get('https://algoindexer.algoexplorerapi.io/v2/transactions?asset-id=27165954&currency-greater-than=0&address={}'.format(Wallet_Address)).text
 response_info = json.loads(response)
 
 for transactions in response_info['transactions']:
