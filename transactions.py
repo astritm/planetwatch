@@ -14,7 +14,9 @@ import os
 
 def write(state):
 
-  #Get PLANET prices from Coingecko
+ #Get PLANET prices from Coingecko
+ #cache 
+ @st.cache(suppress_st_warning=True, ttl=60)
  def planet_price(vs_currency):
    request_price = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=planetwatch&vs_currencies={}'.format(vs_currency))
    if request_price.status_code != 200: 
