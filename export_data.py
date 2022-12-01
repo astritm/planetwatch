@@ -45,9 +45,6 @@ def write(state):
     for transactions in response_info_algo['transactions']:
      all_transactions = all_transactions + 1
     
-   
-
-    @st.cache(suppress_st_warning=True, ttl=120)
     with st.spinner(text='In Progress...'):
                     
      response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
