@@ -46,7 +46,7 @@ def write(state):
      all_transactions = all_transactions + 1
     
     with st.spinner(text='In Progress...'):
-                    
+     @st.cache(suppress_st_warning=True, ttl=60)               
      response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
      if response_planets_price_usd.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
@@ -54,7 +54,7 @@ def write(state):
      response_planets_price_usd = response_planets_price_usd.text
      time.sleep(1)
      
-     
+     @st.cache(suppress_st_warning=True, ttl=60)
      response_planets_price_eur = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=eur&days=max', timeout=(2, 5))
      if response_planets_price_eur.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
@@ -62,7 +62,7 @@ def write(state):
      response_planets_price_eur = response_planets_price_eur.text 
      time.sleep(1)
      
-     
+     @st.cache(suppress_st_warning=True, ttl=60)
      response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))       
      if response_planets_price_gbp.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
