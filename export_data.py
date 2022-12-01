@@ -57,15 +57,18 @@ def write(state):
        response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
        response_planets_price_usd = response_planets_price_usd.text
        response_info_planets_price = json.loads(response_planets_price_usd)
+       time.sleep(2)
       elif currency == "eur":
        response_planets_price_eur = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=eur&days=max', timeout=(2, 5))
        response_planets_price_eur = response_planets_price_eur.text
        response_info_planets_price = json.loads(response_planets_price_eur)
+       time.sleep(2)
       elif currency == 'gbp':
        response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))
        response_planets_price_gbp = response_planets_price_gbp.text
        response_info_planets_price = json.loads(response_planets_price_gbp)
-       
+       time.sleep(2)
+      time.sleep(1)
       i = len(response_info_planets_price['prices']) - 1
       for price in response_info_planets_price['prices']:
        date_list = datetime.today()
