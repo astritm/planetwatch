@@ -23,6 +23,7 @@ def write(state):
          
      )
  
+ 
  form = st.form(key='submit-form')
  Wallet_address = form.text_input('Please enter your Algorand wallet address without spaces!')
  submit = form.form_submit_button('Submit')
@@ -45,37 +46,24 @@ def write(state):
     for transactions in response_info_algo['transactions']:
      all_transactions = all_transactions + 1
     
+    
+    
     with st.spinner(text='In Progress...'):
-     @st.cache(suppress_st_warning=True, ttl=60)               
-     response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
-     if response_planets_price_usd.status_code != 200:
-      st.error("Error getting Planets price from coingeco, try again later...")
-      st.stop()
-     response_planets_price_usd = response_planets_price_usd.text
-     time.sleep(1)
      
+     #getting PLANETS:FIAT:DATE from Coingeco and cashing for 60 sec
      @st.cache(suppress_st_warning=True, ttl=60)
-     response_planets_price_eur = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=eur&days=max', timeout=(2, 5))
-     if response_planets_price_eur.status_code != 200:
-      st.error("Error getting Planets price from coingeco, try again later...")
-      st.stop()
-     response_planets_price_eur = response_planets_price_eur.text 
-     time.sleep(1)
-     
-     @st.cache(suppress_st_warning=True, ttl=60)
-     response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))       
-     if response_planets_price_gbp.status_code != 200:
-      st.error("Error getting Planets price from coingeco, try again later...")
-      st.stop()
-     response_planets_price_gbp = response_planets_price_gbp.text
-     
-     #getting PLANETS:FIAT:DATE from Coingeco
      def planet_price_date(date, currency):
       if currency == 'usd':
+       response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
+       response_planets_price_usd = response_planets_price_usd.text
        response_info_planets_price = json.loads(response_planets_price_usd)
       elif currency == "eur":
+       response_planets_price_eur = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=eur&days=max', timeout=(2, 5))
+       response_planets_price_eur = response_planets_price_eur.text
        response_info_planets_price = json.loads(response_planets_price_eur)
       elif currency == 'gbp':
+       response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))
+       response_planets_price_gbp = response_planets_price_gbp.text
        response_info_planets_price = json.loads(response_planets_price_gbp)
        
       i = len(response_info_planets_price['prices']) - 1
