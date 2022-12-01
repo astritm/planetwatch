@@ -22,7 +22,7 @@ def write(state):
          """, unsafe_allow_html=True
          
      )
- @st.cache(suppress_st_warning=True, persist=True, max_entries=10)
+ 
  form = st.form(key='submit-form')
  Wallet_address = form.text_input('Please enter your Algorand wallet address without spaces!')
  submit = form.form_submit_button('Submit')
@@ -44,16 +44,12 @@ def write(state):
     all_transactions = 0
     for transactions in response_info_algo['transactions']:
      all_transactions = all_transactions + 1
-    @st.cache(suppress_st_warning=True, ttl=120)
-    response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
-    if response_planets_price_usd.status_code != 200:
-      st.error("Error getting Planets price from coingeco, try again later...")
-      st.stop()
     
+   
 
-    
+    @st.cache(suppress_st_warning=True, ttl=120)
     with st.spinner(text='In Progress...'):
-     @st.cache(suppress_st_warning=True, ttl=120)               
+                    
      response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
      if response_planets_price_usd.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
@@ -61,7 +57,7 @@ def write(state):
      response_planets_price_usd = response_planets_price_usd.text
      time.sleep(1)
      
-     @st.cache(suppress_st_warning=True, ttl=120)
+     
      response_planets_price_eur = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=eur&days=max', timeout=(2, 5))
      if response_planets_price_eur.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
@@ -69,7 +65,7 @@ def write(state):
      response_planets_price_eur = response_planets_price_eur.text 
      time.sleep(1)
      
-     @st.cache(suppress_st_warning=True, ttl=120)
+     
      response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))       
      if response_planets_price_gbp.status_code != 200:
       st.error("Error getting Planets price from coingeco, try again later...")
