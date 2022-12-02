@@ -51,7 +51,7 @@ def write(state):
     with st.spinner(text='In Progress...'):
      
      #getting PLANETS:FIAT:DATE from Coingeco and cashing for 60 sec
-     @st.cache(suppress_st_warning=True, ttl=60)
+     
      def planet_price_date(date, currency):
       if currency == 'usd':
        response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
