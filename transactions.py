@@ -16,7 +16,7 @@ def write(state):
 
  #Get PLANET prices from Coingecko
  #cache 
- @st.cache(suppress_st_warning=True, ttl=60)
+ @st.cache(suppress_st_warning=True, ttl=300)
  def planet_price(vs_currency):
    request_price = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=planetwatch&vs_currencies={}'.format(vs_currency))
    if request_price.status_code != 200: 
@@ -24,7 +24,9 @@ def write(state):
     st.stop()
    price = json.loads(request_price.text)
    return price['planetwatch'][vs_currency]
+   
  nrplanets = st.sidebar.number_input("Little PLANETS Calculator", value=1)
+ 
  st.sidebar.write(pd.DataFrame({
         'USD': [planet_price('usd') * nrplanets],
         'EUR': [planet_price('eur') * nrplanets],
