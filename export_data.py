@@ -25,20 +25,14 @@ def write(state):
  
  
  form = st.form(key='submit-form')
- Wallet_address = form.text_input('Please enter your Algorand wallet address without spaces!')
+ wallet_address = form.text_input('Please enter your Algorand wallet address without spaces!')
  submit = form.form_submit_button('Submit')
 
  if submit:
-  
-  Counter_tx = 0
-  dicts={}
-  
- 
-  price_date = {}
     
-  if len(Wallet_address) == 58:
+  if len(wallet_address) == 58:
     #API request to Algoexplorer.io
-    response_algoexplorer = requests.get('https://algoindexer.algoexplorerapi.io/v2/transactions?limit=1000&asset-id=27165954&currency-greater-than=0&address={}'.format(Wallet_address)).text
+    response_algoexplorer = requests.get('https://algoindexer.algoexplorerapi.io/v2/transactions?limit=2000&asset-id=27165954&currency-greater-than=0&address={}'.format(wallet_address)).text
     response_info_algo = json.loads(response_algoexplorer)
 
     
@@ -48,87 +42,93 @@ def write(state):
     
     
     
-    with st.spinner(text='In Progress...'):
+    with st.spinner(text='Getting data from the Algorand Blockchain...'):
      
-     #getting PLANETS:FIAT:DATE from Coingeco and cashing for 60 sec
-     
-     def planet_price_date(date, currency):
-      if currency == 'usd':
-       response_planets_price_usd = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=usd&days=max', timeout=(2, 5))
-       response_planets_price_usd = response_planets_price_usd.text
-       response_info_planets_price = json.loads(response_planets_price_usd)
-       time.sleep(2)
-      elif currency == "eur":
-       response_planets_price_eur = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=eur&days=max', timeout=(2, 5))
-       response_planets_price_eur = response_planets_price_eur.text
-       response_info_planets_price = json.loads(response_planets_price_eur)
-       time.sleep(2)
-      elif currency == 'gbp':
-       response_planets_price_gbp = requests.get('https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency=gbp&days=max', timeout=(2, 5))
-       response_planets_price_gbp = response_planets_price_gbp.text
-       response_info_planets_price = json.loads(response_planets_price_gbp)
-       time.sleep(2)
-      time.sleep(1)
-      i = len(response_info_planets_price['prices']) - 1
-      for price in response_info_planets_price['prices']:
-       date_list = datetime.today()
-       date_delta = date_list - timedelta(days=i)
-       date_delta = date_delta.strftime("%d-%m-%Y")
-       price_d = price[1]
-       price_d = float(round(price_d, 4))
-       price_date[date_delta] = price_d
-       i-= 1
-      return (price_date[date])
-     
-     index = 0
-                     
-     
-     for transactions in response_info_algo['transactions']:
-      amount = transactions['asset-transfer-transaction']['amount']
-      amount = amount / 1000000
-      amount = round (amount, 2)
+      def get_date_from_number(number):
+         today = datetime.today()
+         date_delta = today - timedelta(days=number)
+         return date_delta.strftime("%d-%m-%Y")
+    
+      
+      
+      #getting PLANETS:FIAT:DATE from Coingeco and cashing for 6h
+      @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
+      def planet_price_date(vs_currency):
+         prices_dates={}
+         request = requests.get(f'https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency={vs_currency}&days=max')
+         response = request.text
+         prices = json.loads(response)
+         prices = prices['prices']
+         counter = 0
+         for i in prices:
+            date = str(get_date_from_number(len(prices) - counter -1))
+            price = i[1]
+            price = float(round(price, 3))
+            prices_dates[date] = price
+            counter += 1
+         return prices_dates
+         
+      time.sleep(2)
+      prices_usd = planet_price_date("usd")
+      time.sleep(2)
+      prices_eur = planet_price_date("eur")
+      time.sleep(2)
+      prices_gbp = planet_price_date("gbp")
+      time.sleep(2)
 
-        
-      timestamp = transactions['round-time']
-      date_txid = datetime.fromtimestamp(timestamp)
-      date_txid = date_txid.strftime("%d-%m-%Y")
 
-      Counter_tx = Counter_tx + 1
-      
-      price_usd = planet_price_date(date_txid, 'usd')
-      price_eur = planet_price_date(date_txid, 'eur')
-      price_gbp = planet_price_date(date_txid, 'gbp')
-     
-      
-      if transactions['asset-transfer-transaction']['receiver'] == Wallet_address:
-         Total_usd = round(price_usd * amount, 3)
-         Total_eur = round(price_eur * amount, 3)
-         Total_gbp = round(price_gbp * amount, 3)
-         amount = str(amount)
-         price_usd = str(price_usd)
-         Total_usd = str(Total_usd)
-         Total_eur = str(Total_eur)
-         Total_gbp = str(Total_gbp)
-         dicts[index]={"date":date_txid, "price/usd":price_usd, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "received" }
-       
-              
-      if transactions['asset-transfer-transaction']['receiver'] != Wallet_address:
-         Total_usd = round(price_usd * amount, 3)
-         Total_eur = round(price_eur * amount, 3)
-         Total_gbp = round(price_gbp * amount, 3)
-         amount = str(amount)
-         price_usd = str(price_usd)
-         Total_usd= str(Total_usd)
-         Total_eur = str(Total_eur)
-         Total_gbp = str(Total_gbp)
-         dicts[index]={"date":date_txid, "price/usd":price_usd, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "sent" }
-      
-      
-      
-      index = index + 1
-      
 
-    df = pd.DataFrame.from_dict(dicts, orient='index')
+      dicts={}
+      def transactions(wallet_address):
+            request = requests.get(f'https://algoindexer.algoexplorerapi.io/v2/transactions?limit=2000&asset-id=27165954&currency-greater-than=0&address={wallet_address}').text
+            response_info = json.loads(request)
+         # all_transactions = 0
+         # for transactions in response_info['transactions']:
+            # all_transactions += 1
+            index = 0
+            counter_tx = 0
+            for transactions in response_info['transactions']:
+               amount = transactions['asset-transfer-transaction']['amount']
+               amount = amount / 1000000
+               amount = round (amount, 2)
+               timestamp = transactions['round-time']
+               date_txid = datetime.fromtimestamp(timestamp)
+               date_txid = date_txid.strftime("%d-%m-%Y")
+
+               counter_tx += 1
+               price_usd = prices_usd[str(date_txid)]
+               price_eur = prices_eur[str(date_txid)]
+               price_gbp = prices_gbp[str(date_txid)]
+
+               if transactions['asset-transfer-transaction']['receiver'] == wallet_address:
+                  Total_usd = round(price_usd * amount, 3)
+                  Total_eur = round(price_eur * amount, 3)
+                  Total_gbp = round(price_gbp * amount, 3)
+                  amount = str(amount)
+                  price_usd = str(price_usd)
+                  price_eur = str(price_eur)
+                  price_gbp = str(price_gbp)
+                  Total_usd = str(Total_usd)
+                  Total_eur = str(Total_eur)
+                  Total_gbp = str(Total_gbp)
+                  dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "received" }
+                  
+               if transactions['asset-transfer-transaction']['receiver'] != wallet_address:
+                  Total_usd = round(price_usd * amount, 3)
+                  Total_eur = round(price_eur * amount, 3)
+                  Total_gbp = round(price_gbp * amount, 3)
+                  amount = str(amount)
+                  price_usd = str(price_usd)
+                  price_eur = str(price_eur)
+                  price_gbp = str(price_gbp)
+                  Total_usd= str(Total_usd)
+                  Total_eur = str(Total_eur)
+                  Total_gbp = str(Total_gbp)
+                  dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "sent" }   
+               index += 1
+            return dicts
+                    
+    df = pd.DataFrame.from_dict(transactions(wallet_address), orient='index')
     st.dataframe(df)
     today = date.today()
     d = today.strftime("%b-%d-%Y")
@@ -137,7 +137,7 @@ def write(state):
     def get_table_download_link_csv(df):
      csv = df.to_csv().encode()
      b64 = base64.b64encode(csv).decode()
-     href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{Wallet_address}_{d}.csv" target="_blank"><p align="right">download...</p></a>'
+     href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{wallet_address}_{d}.csv" target="_blank"><p align="right">download...</p></a>'
      return href
      
     st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
