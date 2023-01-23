@@ -9,7 +9,7 @@ def write(state):
 
  st.markdown(
           """
-          <h1 style="color: darkblue; text-align:center;">PLANETS calculator</h1>
+          <h2 style="color: darkblue; text-align:center;">PLANETS calculator</h2>
          
          
          """, unsafe_allow_html=True

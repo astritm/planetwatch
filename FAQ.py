@@ -4,7 +4,7 @@ import streamlit as st
 def write(state):
  st.markdown(
           """
-          <h1 style="color: darkblue; text-align:center;">Planetwatch FAQ</h1>
+          <h2 style="color: darkblue; text-align:center;">Planetwatch FAQ</h2>
           
           ------------
           
