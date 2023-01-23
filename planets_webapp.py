@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit.elements import layouts
 import streamlit_analytics
 
-st.set_page_config(page_title="PW tools")
+st.set_page_config(page_title="PW Tool", layout="wide")
 
 # Load pages
 #import transactions
