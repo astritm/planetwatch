@@ -11,6 +11,8 @@ from collections import defaultdict
 import base64
 from math import ceil
 
+# 3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ
+  
 def write(state): 
 
  
@@ -79,6 +81,7 @@ def write(state):
 
 
       dicts={}
+      @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
       def transactions(wallet_address):
             request = requests.get(f'https://algoindexer.algoexplorerapi.io/v2/transactions?limit=2000&asset-id=27165954&currency-greater-than=0&address={wallet_address}').text
             response_info = json.loads(request)
@@ -127,7 +130,7 @@ def write(state):
                   dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "sent" }   
                index += 1
             return dicts
-                    
+               
     df = pd.DataFrame.from_dict(transactions(wallet_address), orient='index')
     st.dataframe(df)
     today = date.today()
