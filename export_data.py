@@ -11,6 +11,7 @@ from collections import defaultdict
 import base64
 from math import ceil
 import asyncio
+import aiohttp
 
 # 3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ
   
@@ -68,54 +69,55 @@ def write(state):
       time.sleep(2)
 
       dicts={}
-      @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
-      def transactions(wallet_address):
-         with requests.get(f'https://algoindexer.algoexplorerapi.io/v2/transactions?limit=2000&asset-id=27165954&currency-greater-than=0&address={wallet_address}') as request:
-               response_info = json.loads(request.text)
-               index = 0
-               counter_tx = 0
-               for transactions in response_info['transactions']:
-                  amount = transactions['asset-transfer-transaction']['amount']
-                  amount = amount / 1000000
-                  amount = round (amount, 2)
-                  timestamp = transactions['round-time']
-                  date_txid = datetime.fromtimestamp(timestamp)
-                  date_txid = date_txid.strftime("%d-%m-%Y")
+      # @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
+      async def transactions(wallet_address):
+         async with aiohttp.ClientSession() as session:
+            async with session.get(f'https://algoindexer.algoexplorerapi.io/v2/transactions?limit=2000&asset-id=27165954&currency-greater-than=0&address={wallet_address}') as request:
+                  response_info = await request.json()
+                  index = 0
+                  counter_tx = 0
+                  for transactions in response_info['transactions']:
+                     amount = transactions['asset-transfer-transaction']['amount']
+                     amount = amount / 1000000
+                     amount = round (amount, 2)
+                     timestamp = transactions['round-time']
+                     date_txid = datetime.fromtimestamp(timestamp)
+                     date_txid = date_txid.strftime("%d-%m-%Y")
 
-                  counter_tx += 1
-                  price_usd = prices_usd[str(date_txid)]
-                  price_eur = prices_eur[str(date_txid)]
-                  price_gbp = prices_gbp[str(date_txid)]
+                     counter_tx += 1
+                     price_usd = prices_usd[str(date_txid)]
+                     price_eur = prices_eur[str(date_txid)]
+                     price_gbp = prices_gbp[str(date_txid)]
 
-                  if transactions['asset-transfer-transaction']['receiver'] == wallet_address:
-                     Total_usd = round(price_usd * amount, 3)
-                     Total_eur = round(price_eur * amount, 3)
-                     Total_gbp = round(price_gbp * amount, 3)
-                     amount = str(amount)
-                     price_usd = str(price_usd)
-                     price_eur = str(price_eur)
-                     price_gbp = str(price_gbp)
-                     Total_usd = str(Total_usd)
-                     Total_eur = str(Total_eur)
-                     Total_gbp = str(Total_gbp)
-                     dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "received" }
-                     
-                  if transactions['asset-transfer-transaction']['receiver'] != wallet_address:
-                     Total_usd = round(price_usd * amount, 3)
-                     Total_eur = round(price_eur * amount, 3)
-                     Total_gbp = round(price_gbp * amount, 3)
-                     amount = str(amount)
-                     price_usd = str(price_usd)
-                     price_eur = str(price_eur)
-                     price_gbp = str(price_gbp)
-                     Total_usd= str(Total_usd)
-                     Total_eur = str(Total_eur)
-                     Total_gbp = str(Total_gbp)
-                     dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "sent" }   
-                  index += 1
+                     if transactions['asset-transfer-transaction']['receiver'] == wallet_address:
+                        Total_usd = round(price_usd * amount, 3)
+                        Total_eur = round(price_eur * amount, 3)
+                        Total_gbp = round(price_gbp * amount, 3)
+                        amount = str(amount)
+                        price_usd = str(price_usd)
+                        price_eur = str(price_eur)
+                        price_gbp = str(price_gbp)
+                        Total_usd = str(Total_usd)
+                        Total_eur = str(Total_eur)
+                        Total_gbp = str(Total_gbp)
+                        dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "received" }
+                        
+                     if transactions['asset-transfer-transaction']['receiver'] != wallet_address:
+                        Total_usd = round(price_usd * amount, 3)
+                        Total_eur = round(price_eur * amount, 3)
+                        Total_gbp = round(price_gbp * amount, 3)
+                        amount = str(amount)
+                        price_usd = str(price_usd)
+                        price_eur = str(price_eur)
+                        price_gbp = str(price_gbp)
+                        Total_usd= str(Total_usd)
+                        Total_eur = str(Total_eur)
+                        Total_gbp = str(Total_gbp)
+                        dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "sent" }   
+                     index += 1
          return dicts
                
-    df = pd.DataFrame.from_dict(transactions(wallet_address), orient='index')
+    df = pd.DataFrame.from_dict(asyncio.run(transactions(wallet_address)), orient='index')
     st.dataframe(df, height = 500)
     today = date.today()
     d = today.strftime("%b-%d-%Y")
