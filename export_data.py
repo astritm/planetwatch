@@ -12,29 +12,31 @@ import base64
 from math import ceil
 import asyncio
 import aiohttp
+from aiocache import Cache
+from aiocache import cached
 
-# 3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ
+# c
   
 def write(state): 
- st.markdown(
-         """
-         <h2 style="color: darkblue; text-align:center;">Export Transaction Data</h2>
-         
-         
-         """, unsafe_allow_html=True
-         
-     )
-
  
- form = st.form(key='submit-form', clear_on_submit=False)
- wallet_address = form.text_input('Please enter your Algorand wallet address without spaces!')
- submit = form.form_submit_button('Submit')
+
+ col1, col2, col3 = st.columns([1,4,1])
+ with col2:
+   st.markdown(
+            """
+            <h2 style="color: darkblue; text-align:center;">Export Transaction Data</h2>
+            """, unsafe_allow_html=True
+            
+      )
+   form = st.form(key='submit-form', clear_on_submit=False)
+   wallet_address = form.text_input('Please enter your Algorand wallet address without spaces!')
+   submit = form.form_submit_button('Submit')
 
  if submit:
     
   if len(wallet_address) == 58:
-       
-    with st.spinner(text='Getting data from the Algorand Blockchain...'):
+   with col2:  
+     with st.spinner(text='Gathering data from Blockchain...'):
      
       def get_date_from_number(number):
          today = datetime.today()
@@ -55,7 +57,7 @@ def write(state):
          for i in prices:
             date = str(get_date_from_number(len(prices) - counter -1))
             price = i[1]
-            price = float(round(price, 3))
+            price = float(round(price, 4))
             prices_dates[date] = price
             counter += 1
          return prices_dates
@@ -70,8 +72,10 @@ def write(state):
 
       dicts={}
       # @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
+      @cached(ttl=120, cache=Cache.MEMORY)
       async def transactions(wallet_address):
-         async with aiohttp.ClientSession() as session:
+         try: 
+          async with aiohttp.ClientSession() as session:
             async with session.get(f'https://algoindexer.algoexplorerapi.io/v2/transactions?limit=2000&asset-id=27165954&currency-greater-than=0&address={wallet_address}') as request:
                   response_info = await request.json()
                   index = 0
@@ -115,10 +119,14 @@ def write(state):
                         Total_gbp = str(Total_gbp)
                         dicts[index]={"date":date_txid, "price/usd":price_usd, "price/eur":price_eur, "price/gbp":price_gbp, "amount":amount, "usd": Total_usd, "eur": Total_eur, "gbp": Total_gbp, "in/out": "sent" }   
                      index += 1
+         except Exception as e:
+          with col2:
+           st.error(f'Error getting data from blockchain, please try again...')
          return dicts
                
       df = pd.DataFrame.from_dict(asyncio.run(transactions(wallet_address)), orient='index')
-      st.dataframe(df, height = 500)
+      with col2:
+       st.dataframe(df, height = 500)
       today = date.today()
       d = today.strftime("%b-%d-%Y")
       
@@ -126,10 +134,10 @@ def write(state):
       def get_table_download_link_csv(df):
          csv = df.to_csv().encode()
          b64 = base64.b64encode(csv).decode()
-         href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{wallet_address}_{d}.csv" target="_blank"><p align="right">CSV Download</p></a>'
+         href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{wallet_address}_{d}.csv" target="_blank"><button style="position: absolute; right: 45%; background-color: transparent; border: 1px solid rgba(49, 51, 63, 0.2);padding: 0.25rem 0.75rem;border-radius: 0.25rem; color:darkblue">download</button></a>'
          return href
-      
-      st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
+      with col2:
+       st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
       
 
 
