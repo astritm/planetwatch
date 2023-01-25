@@ -1,25 +1,17 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
 import json
-from typing import Counter
 import requests
 from datetime import datetime, date, timedelta
-import time
-from operator import add
-from collections import defaultdict
 import base64
-from math import ceil
 import asyncio
 import aiohttp
 from aiocache import Cache
 from aiocache import cached
 
-# c
+# 3KBG44MVZSKKOUDW7QJ2QS2FYHFIHNTLT3Q7MTQ2CLG65ZHQ6RL6ENZ7GQ
   
 def write(state): 
- 
-
  col1, col2, col3 = st.columns([1,4,1])
  with col2:
    st.markdown(
@@ -42,36 +34,33 @@ def write(state):
          today = datetime.today()
          date_delta = today - timedelta(days=number)
          return date_delta.strftime("%d-%m-%Y")
-    
-      
-      
-      #getting PLANETS:FIAT:DATE from Coingeco and cashing for 6h
-      @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
+
+      #getting PLANETS:FIAT:DATE from Coingeco and cashing for 2h
+      prices_dates={}
+      @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=120)
       def planet_price_date(vs_currency):
-         prices_dates={}
-         request = requests.get(f'https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency={vs_currency}&days=max')
-         response = request.text
-         prices = json.loads(response)
-         prices = prices['prices']
-         counter = 0
-         for i in prices:
-            date = str(get_date_from_number(len(prices) - counter -1))
-            price = i[1]
-            price = float(round(price, 4))
-            prices_dates[date] = price
-            counter += 1
-         return prices_dates
-         
-      time.sleep(2)
+            try:
+               request = requests.get(f'https://api.coingecko.com/api/v3/coins/planetwatch/market_chart?vs_currency={vs_currency}&days=max')
+               response = request.text
+               prices = json.loads(response)
+               prices = prices['prices']
+               counter = 0
+               for i in prices:
+                  date = str(get_date_from_number(len(prices) - counter -1))
+                  price = i[1]
+                  price = float(round(price, 4))
+                  prices_dates[date] = price
+                  counter += 1
+            except Exception as e:
+               st.error('Cant get Planet price! Try again later!')
+               st.stop()
+            return prices_dates
+          
       prices_usd = planet_price_date("usd")
-      time.sleep(2)
       prices_eur = planet_price_date("eur")
-      time.sleep(2)
       prices_gbp = planet_price_date("gbp")
-      time.sleep(2)
 
       dicts={}
-      # @st.cache(suppress_st_warning=True, allow_output_mutation=True, ttl=20000)
       @cached(ttl=120, cache=Cache.MEMORY)
       async def transactions(wallet_address):
          try: 
@@ -121,9 +110,9 @@ def write(state):
                      index += 1
          except Exception as e:
           with col2:
-           st.error(f'Error getting data from blockchain, please try again...')
-         return dicts
-               
+           st.error(f"Oops can't get Blockchain data! Try again later!")
+           st.stop()
+         return dicts         
       df = pd.DataFrame.from_dict(asyncio.run(transactions(wallet_address)), orient='index')
       with col2:
        st.dataframe(df, height = 500)
@@ -136,9 +125,10 @@ def write(state):
          b64 = base64.b64encode(csv).decode()
          href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{wallet_address}_{d}.csv" target="_blank"><button style="position: absolute; right: 45%; background-color: transparent; border: 1px solid rgba(49, 51, 63, 0.2);padding: 0.25rem 0.75rem;border-radius: 0.25rem; color:darkblue">download</button></a>'
          return href
-      with col2:
-       st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
       
+      with col2:
+            st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
+         
 
 
     
