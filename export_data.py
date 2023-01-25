@@ -117,19 +117,20 @@ def write(state):
                      index += 1
          return dicts
                
-    df = pd.DataFrame.from_dict(asyncio.run(transactions(wallet_address)), orient='index')
-    st.dataframe(df, height = 500)
-    today = date.today()
-    d = today.strftime("%b-%d-%Y")
-   
-   
-    def get_table_download_link_csv(df):
-     csv = df.to_csv().encode()
-     b64 = base64.b64encode(csv).decode()
-     href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{wallet_address}_{d}.csv" target="_blank"><p align="right">CSV Download</p></a>'
-     return href
-     
-    st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
+      df = pd.DataFrame.from_dict(asyncio.run(transactions(wallet_address)), orient='index')
+      st.dataframe(df, height = 500)
+      today = date.today()
+      d = today.strftime("%b-%d-%Y")
+      
+      
+      def get_table_download_link_csv(df):
+         csv = df.to_csv().encode()
+         b64 = base64.b64encode(csv).decode()
+         href = f'<a href="data:file/csv;base64,{b64}" download="wallet_{wallet_address}_{d}.csv" target="_blank"><p align="right">CSV Download</p></a>'
+         return href
+      
+      st.markdown(get_table_download_link_csv(df), unsafe_allow_html=True)
+      
 
 
     
